@@ -115,16 +115,15 @@ export default function CarAnalysis({json={}}) {
   }, [data])
 
   const improveDescription = () => {
-    setUserPromt(userPromt + '\n Improve from my existing description: \n' + data?.vehicleDetail?.description)
+    setUserPromt(userPromt + 'Improve from my existing description: \n' + data?.vehicleDetail?.description)
     generateDescription()
   }
 
   const generateDescription = () => {
     changeLoadingStates()
     setGeneratingDescription(true)
-    const apiKey = process.env.NEXT_PUBLIC_OPENAI_API_KEY;
     const originalDescription = data?.vehicleDetail?.description
-    const apiUrl = 'https://api.openai.com/v1/chat/completions';
+
     if(originalDescription){
       const prompt = `
 Refine and reword or generate the Turo car profile description in plain text with breaking lines and bullet points.
@@ -141,19 +140,10 @@ Ensure the paragraph includes information on "features provided by the car," "Wh
 Here is the extra request that can override my above request: ${userPromt}
 `;
  console.log(prompt)
-    axios.post(apiUrl, {
-      model: 'gpt-3.5-turbo',
-      messages: [{ role: 'system', content: 'You are a helpful assistant.' }, { role: 'user', content: prompt }],
-    }, {
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`,
-      },
-    })
+    axios.post('/api/ai', {prompt})
       .then(response => {
         console.log(response.data)
-        const generatedDescription = response.data?.choices[0].message.content;
-        // Use the generatedDescription in your React app JSX code
+        const generatedDescription = response.data.response
         setDescription(generatedDescription)
         setGeneratingDescription(false)
       })
@@ -175,9 +165,9 @@ Here is the extra request that can override my above request: ${userPromt}
 
   return (<div className='bg-gray-0 w-[830px] rounded-3xl p-4'>
     <div className='text-3xl font-bold mb-2'>AI assistants</div>
-    <div className="p-8 rounded-xl bg-gray-100">
+    <div className="p-8 rounded-xl">
       <div className='flex py-2 flex-row items-center'><Star /> <span className="font-bold text-xl">Assist on Description</span></div>
-      <textarea className='h-[100px] border-2 p-2 px-4 w-full block rounded-lg' placeholder="Some extra thing you want the AI to know about" value={userPromt} onChange={(e)=>setUserPromt(e.target.value)} />
+      <textarea className='h-[150px] border-2 p-2 px-4 w-full block rounded-lg' placeholder="Some extra thing you want the AI to know about" value={userPromt} onChange={(e)=>setUserPromt(e.target.value)} />
       <div className="flex items-center">
         <button className="block mx-auto border-2 border-[#593CFB] text-[#593CFB] p-2 rounded-lg px-8 m-4 font-semibold hover:opacity-80 disabled:opacity-80" disabled={generatingDescription} onClick={()=>improveDescription()}>
           Improve the existing description

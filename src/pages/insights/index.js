@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { useRouter, Link } from 'next/router';
+import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 import CarAnalysis from '../../components/CarAnalysis'
 
@@ -18,10 +19,10 @@ export default function InsightsPage() {
   }, [router])
   return (
     <div className='pt-8'>
-        <Link href='/' className='text-md border-2 p-2 px-4 border-gray-300 inline rounded-xl font-light m-8 cursor-pointer'>back</Link>
-      <main
-      className={`min-h-screen flex flex-row items-start p-12 pt-24`}
-    >
+      <Link href='/' className='text-md border-2 p-2 px-4 border-gray-300 inline rounded-xl font-light m-8 cursor-pointer'>back</Link>
+      {data && <main
+        className={`min-h-screen flex flex-row items-start p-12 pt-24`}
+      >
       <div className=''>
         <CarAnalysis json={data} />
       </div>
@@ -29,7 +30,7 @@ export default function InsightsPage() {
       <div className='text-3xl font-light mb-2'>Car Page</div>
         <img className='w-50% shadow-2xl rounded-3xl border-8 border-light' src={image} />
       </div>
-    </main>
+    </main>}
     </div>
   )
 }
