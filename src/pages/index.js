@@ -28,11 +28,12 @@ const Landing = () => {
         tempDiv.innerHTML = reader.result;
         document.body.appendChild(tempDiv);
 
+        console.log(reader.result)
         const $ = cheerio.load(reader.result)
         const content = $('#__NEXT_DATA__').html()
+        const originalUrl = $('meta[property="og:url"]').attr('content')
         const json = JSON.parse(content)
         const parsedData = json.props.pageProps.data
-        console.log(3)
         // Wait for the JavaScript to execute (if any)
         // await new Promise(resolve => {
         //   if (tempDiv.querySelector('script')) {
@@ -43,7 +44,6 @@ const Landing = () => {
         //     resolve();
         //   }
         // });
-        console.log(1)
         // Take a screenshot of the rendered HTML
         await html2canvas(tempDiv, { windowWidth: tempDiv.scrollWidth, windowHeight: tempDiv.scrollHeight }).then((canvas) => {
           // Convert the canvas to a data URL
@@ -54,10 +54,11 @@ const Landing = () => {
 
           // save dataUrl to local storage
           localStorage.setItem('turoInsightsImageUrl', dataUrl);
+          localStorage.setItem('turoInsightsOriginalUrl', originalUrl);
           localStorage.setItem('turoInsightsData', JSON.stringify(parsedData));
 
           // Navigate to the Insights page
-          router.push('insights');
+          router.push(`insights`);
         });
 
         // Remove the temporary div
@@ -76,7 +77,6 @@ const Landing = () => {
     accept: 'text/html',
     multiple: false,
   });
-
 
   return (
     <div className="min-h-screen flex items-center justify-center">

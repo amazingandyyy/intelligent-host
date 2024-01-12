@@ -132,10 +132,8 @@ Use some emojis for an attractive description.
 
 The car is a ${data?.vehicleDetail?.vehicle.year} ${data?.vehicleDetail?.vehicle.make} ${data?.vehicleDetail?.vehicle.model} ${data?.vehicleDetail?.vehicle.trim}.
 
-Find point of interest like winery, ski resorts or beaches that's about 200 miles from ${data?.vehicleDetail?.location.city}, ${data?.vehicleDetail?.location.state}, ${data?.vehicleDetail?.location.country} and maybe add them to the content.
-
 Include at least four paragraphs in the return part, but only plain text, no bolded text or any styles is needed for each paragraph.
-Ensure the paragraph includes information on "features provided by the car," "Why it's the Best Choice for short trips and long trips," and "Why Turo with Us."
+Ensure the paragraph includes information on "features provided by the car," "Why it's the Best Choice for short trips and long trips (by finding point of interest like winery, ski resorts or beaches that's about 200 miles from ${data?.vehicleDetail?.location.city}, ${data?.vehicleDetail?.location.state}, ${data?.vehicleDetail?.location.country}.)" and "Why Turo with Us."
 
 Here is the extra request that can override my above request: ${userPromt}
 `;
@@ -166,7 +164,7 @@ Here is the extra request that can override my above request: ${userPromt}
   return (<div className='bg-gray-0 w-[830px] rounded-3xl p-4'>
     <div className='text-3xl font-bold mb-2'>AI assistants</div>
     <div className="p-8 rounded-xl">
-      <div className='flex py-2 flex-row items-center'><Star /> <span className="font-bold text-xl">Assist on Description</span></div>
+      <div className='flex py-2 flex-row items-center'><Star /> <span className="font-bold text-xl">Description</span></div>
       <textarea className='h-[150px] border-2 p-2 px-4 w-full block rounded-lg' placeholder="Some extra thing you want the AI to know about" value={userPromt} onChange={(e)=>setUserPromt(e.target.value)} />
       <div className="flex items-center">
         <button className="block mx-auto border-2 border-[#593CFB] text-[#593CFB] p-2 rounded-lg px-8 m-4 font-semibold hover:opacity-80 disabled:opacity-80" disabled={generatingDescription} onClick={()=>improveDescription()}>
@@ -187,8 +185,8 @@ Here is the extra request that can override my above request: ${userPromt}
       </div>}
     </div>
     <div className='py-12' />
-    <div className='text-3xl font-bold mb-2'>Analyzer</div>
-    <div className="p-2 rounded-xl bg-gray-50">
+    <div className='text-3xl font-bold mb-2'>Analysis</div>
+    <div className="p-2 rounded-xl">
       <div className='flex py-2 flex-row items-center font-bold text-xl'><Star />Photos Overview</div>
       <div className="flex w-full p-2 rounded-2xl flex-wrap">
         {data?.vehicleDetail?.images.map((image, index) => {
