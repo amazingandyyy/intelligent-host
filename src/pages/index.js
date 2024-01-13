@@ -112,7 +112,7 @@ const Landing = () => {
           </div>
         )} */}
       </div>
-      <a onClick={tryDemo} className='p-2 cursor-pointer'>or Try Demo Vehicle</a>
+      <a onClick={tryDemo} className='p-2 font-semibold hover:opacity-80 text-sm cursor-pointer text-[#593CFB]'>Try Demo</a>
     </div>
   );
 };
