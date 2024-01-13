@@ -17,14 +17,19 @@ export default function CarAnalysis({json={}}) {
   const [generatingDescription, setGeneratingDescription] = useState(false)
   const [userPromt, setUserPromt] = useState('')
   const [loadingSteps, setLoadingSteps] = useState([
+    'Connecting to OpenAI...',
     'Fetching original description...',
     'Loading the car locations...',
     'Find point of interest nearby...',
+    'Analyzing the car photos...',
     'Checking car facts...',
     'Look for extra features...',
     'Loading host profile...',
+    'Analyzing the car reviews...',
     'Checking car history...',
     'Check overall analysis...',
+    'Analyzing the car description...',
+    'Clean up the description...',
   ]);
   const [currentStep, setCurrentStep] = useState(-1);
   useEffect(()=>{
@@ -156,35 +161,13 @@ Here is the extra request that can override my above request: ${userPromt}
   const changeLoadingStates = async () => {
     for (let i = 0; i < loadingSteps.length; i++) {
       setCurrentStep(i);
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise(resolve => setTimeout(resolve, 1200));
     }
     setGeneratingDescription(false)
   };
 
   return (<div className='bg-gray-0 w-[830px] rounded-3xl p-4'>
-    <div className='text-3xl font-bold mb-2'>AI assistants</div>
-    <div className="p-8 rounded-xl">
-      <div className='flex py-2 flex-row items-center'><Star /> <span className="font-bold text-xl">Description</span></div>
-      <textarea className='h-[150px] border-2 p-2 px-4 w-full block rounded-lg' placeholder="Some extra thing you want the AI to know about" value={userPromt} onChange={(e)=>setUserPromt(e.target.value)} />
-      <div className="flex items-center">
-        <button className="block mx-auto border-2 border-[#593CFB] text-[#593CFB] p-2 rounded-lg px-8 m-4 font-semibold hover:opacity-80 disabled:opacity-80" disabled={generatingDescription} onClick={()=>improveDescription()}>
-          Improve the existing description
-        </button>
-        or
-        <button className="block mx-auto bg-[#593CFB] text-white p-2 rounded-lg px-8 m-4 font-semibold hover:opacity-80 disabled:opacity-80" disabled={generatingDescription} onClick={()=>generateDescription()}>
-          {generatingDescription ? 'Working...':'Generate Description from scratch'}
-        </button>
-      </div>
-      {generatingDescription && <div className="flex w-full p-2 rounded-2xl flex-col mx-auto text-center">
-        <img className="w-96 rounded-xl mx-auto" src="https://resources.turo.com/client/v2/builds/assets/il_car_on_the_desert79819cb36088b27926fa.png" />
-        <div className='font-bold text-2xl mb-2'>AI is working very hard</div>
-        <div className='font-light text-md'>{loadingSteps[currentStep]}</div>
-      </div>}
-      {description.length>0 && <div className="flex w-full p-2 rounded-2xl flex-wrap bg-purple-100">
-        {description.split('\n').map((paragraph, index) => (<div key={index} className="rounded-xl font-md p-2">{paragraph}</div>))}
-      </div>}
-    </div>
-    <div className='py-12' />
+    
     <div className='text-3xl font-bold mb-2'>Analysis</div>
     <div className="p-2 rounded-xl">
       <div className='flex py-2 flex-row items-center font-bold text-xl'><Star />Photos Overview</div>
@@ -210,5 +193,29 @@ Here is the extra request that can override my above request: ${userPromt}
         {(suggestions).map((suggestion, index) => (<div key={index} className="rounded-xl font-md p-2">{suggestion}</div>))}
       </div>
     </div>
+    <div className='py-12' />
+    <div className='text-3xl font-bold mb-2'>AI assistants</div>
+    <div className="p-8 rounded-xl">
+      <div className='flex py-2 flex-row items-center'><Star /> <span className="font-bold text-xl">Description</span></div>
+      <textarea className='h-[150px] border-2 p-2 px-4 w-full block rounded-lg' placeholder="Some extra thing you want the AI to know about" value={userPromt} onChange={(e)=>setUserPromt(e.target.value)} />
+      <div className="flex items-center">
+        <button className="block mx-auto border-2 border-[#593CFB] text-[#593CFB] p-2 rounded-lg px-8 m-4 font-semibold hover:opacity-80 disabled:opacity-80" disabled={generatingDescription} onClick={()=>improveDescription()}>
+          Improve the existing description
+        </button>
+        or
+        <button className="block mx-auto bg-[#593CFB] text-white p-2 rounded-lg px-8 m-4 font-semibold hover:opacity-80 disabled:opacity-80" disabled={generatingDescription} onClick={()=>generateDescription()}>
+          {generatingDescription ? 'Working...':'Generate Description from scratch'}
+        </button>
+      </div>
+      {generatingDescription && <div className="flex w-full p-2 rounded-2xl flex-col mx-auto text-center">
+        <img className="w-96 rounded-xl mx-auto" src="https://resources.turo.com/client/v2/builds/assets/il_car_on_the_desert79819cb36088b27926fa.png" />
+        <div className='font-bold text-2xl mb-2'>AI is working very hard</div>
+        <div className='font-light text-md'>{loadingSteps[currentStep]}</div>
+      </div>}
+      {description.length>0 && <div className="flex w-full p-2 rounded-2xl flex-wrap bg-purple-100">
+        {description.split('\n').map((paragraph, index) => (<div key={index} className="rounded-xl font-md p-2">{paragraph}</div>))}
+      </div>}
+    </div>
+    
   </div>)
 }

@@ -3,6 +3,7 @@ import { useDropzone } from 'react-dropzone';
 import html2canvas from 'html2canvas';
 import { useRouter } from 'next/router';
 import cheerio from 'cheerio'
+import axios from 'axios'
 
 const Landing = () => {
   const [isDragging, setIsDragging] = useState(false);
@@ -24,12 +25,32 @@ const Landing = () => {
 
       reader.onload = async () => {
         // Render the HTML content in a temporary div
-        const tempDiv = document.createElement('div');
-        tempDiv.innerHTML = reader.result;
+        parseHTML(reader.result)
+      };
+
+      // Read the file as text
+      reader.readAsText(file);
+    }
+  }, []);
+
+  const tryDemo = () => {
+    axios.get('https://host.amazingandyyy.com/demo.html')
+    .then((res) => {
+      const demoHTML = res.data
+      parseHTML(demoHTML)
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+  }
+
+  const parseHTML = async (html) => {
+    const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = html;
         document.body.appendChild(tempDiv);
 
-        console.log(reader.result)
-        const $ = cheerio.load(reader.result)
+        console.log(html)
+        const $ = cheerio.load(html)
         const content = $('#__NEXT_DATA__').html()
         const originalUrl = $('meta[property="og:url"]').attr('content')
         const json = JSON.parse(content)
@@ -63,12 +84,7 @@ const Landing = () => {
 
         // Remove the temporary div
         document.body.removeChild(tempDiv);
-      };
-
-      // Read the file as text
-      reader.readAsText(file);
-    }
-  }, []);
+  }
 
   const { getRootProps, getInputProps } = useDropzone({
     onDragEnter,
@@ -79,15 +95,16 @@ const Landing = () => {
   });
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
+    <div className="min-h-screen flex flex-col items-center justify-center">
       <div
         {...getRootProps()}
         className={`bg-${isDragging ? '#593CFB' : 'gray-200'} p-24 rounded-md border-2 cursor-pointer transition-all hover:bg-[#593CFB] hover:text-white`}
       >
-        <div className='text-2xl font-bold mb-2 text-center'>Gain Insights of your Turo Car profile</div>
+        <div className='text-4xl font-light italic'>IntelligentHost</div>
+        <div className='text-2xl font-bold text-center'>Gain Insights and improve your car profile</div>
         <input {...getInputProps()} />
-        <p className="text-center">
-          Drag and drop an HTML file here, or click to select a file
+        <p className="text-end">
+          Drag and drop your car page HTML here
         </p>
         {/* {screenshot && (
           <div className="mt-4">
@@ -95,6 +112,7 @@ const Landing = () => {
           </div>
         )} */}
       </div>
+      <a onClick={tryDemo} className='p-2 cursor-pointer'>or Try Demo Vehicle</a>
     </div>
   );
 };
