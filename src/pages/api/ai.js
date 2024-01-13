@@ -11,7 +11,7 @@ export default async function POST(req, res) {
   console.log(prompt);
   axios.post(apiUrl, {
     model: 'gpt-3.5-turbo',
-    messages: [{ role: 'system', content: 'You are a helpful assistant.' }, { role: 'user', content: prompt }],
+    messages: [{ role: 'system', content: 'You are a helpful Turo host success assistant.' }, { role: 'user', content: prompt }],
   }, {
     headers: {
       'Content-Type': 'application/json',

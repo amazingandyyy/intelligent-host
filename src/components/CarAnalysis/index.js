@@ -30,6 +30,7 @@ export default function CarAnalysis({json={}, tab}) {
     'Check overall analysis...',
     'Analyzing the car description...',
     'Clean up the description...',
+    'This API call is expensive, please use it wisely...',
   ]);
   const [currentStep, setCurrentStep] = useState(-1);
   useEffect(()=>{
@@ -148,7 +149,7 @@ export default function CarAnalysis({json={}, tab}) {
     const originalDescription = data?.vehicleDetail?.description
 
     if(originalDescription){
-      const prompt = `
+      let prompt = `
 Refine and reword or generate the Turo car profile description in plain text with breaking lines and bullet points.
 
 Use some emojis for an attractive description.
@@ -158,12 +159,13 @@ The car is a ${data?.vehicleDetail?.vehicle.year} ${data?.vehicleDetail?.vehicle
 Include at least four paragraphs in the return part, but only plain text, no bolded text or any styles is needed for each paragraph.
 Ensure the paragraph includes information on "features provided by the car," "Why it's the Best Choice for short trips and long trips (by finding point of interest like winery, ski resorts or beaches that's about 200 miles from ${data?.vehicleDetail?.location.city}, ${data?.vehicleDetail?.location.state}, ${data?.vehicleDetail?.location.country}.)" and "Why Turo with Us."
 
-Here is the extra request that can override my above request: ${userPromt}
 `;
- console.log(prompt)
+    if(userPromt.length>0){
+      prompt = prompt + '\nHere are extra request which can overrie my previous request:' + userPromt;
+    }
+    // console.log(prompt)
     axios.post('/api/ai', {prompt})
       .then(response => {
-        console.log(response.data)
         const generatedDescription = response.data.response
         setDescription(generatedDescription)
         setGeneratingDescription(false)
@@ -187,14 +189,6 @@ Here is the extra request that can override my above request: ${userPromt}
   return (<div className='bg-gray-0 w-[830px] rounded-3xl p-4'>
     {tab=='analysis'&&<div>
     <div className='text-3xl font-bold mb-2'>Analysis</div>
-    <div className="p-2 rounded-xl">
-      <div className='flex py-2 flex-row items-center font-bold text-xl'><Star />Photos Overview</div>
-      <div className="flex w-full p-2 rounded-2xl flex-wrap">
-        {data?.vehicleDetail?.images.map((image, index) => {
-          return <img className="rounded-xl m-2" key={index} src={image.thumbnails["170x125"]} />
-        })}
-      </div>
-    </div>
     <div className="pt-8 p-2 rounded-xl">
       <div className='flex py-2 flex-row items-center font-bold text-xl'><Star />Overall Scores</div>
       <RadarChart outerRadius={150} width={600} height={400} data={scores}>
@@ -205,12 +199,23 @@ Here is the extra request that can override my above request: ${userPromt}
         </Radar>
       </RadarChart>
     </div>
+    
     <div className="p-2 rounded-xl">
       <div className='flex py-2 flex-row items-center font-bold text-xl'><Star />Suggestions</div>
       <div className="flex w-full p-2 rounded-2xl flex-wrap">
         {(suggestions).map((suggestion, index) => (<div key={index} className="rounded-xl font-md p-2"><span className="font-semibold">{suggestion.category}:</span> <span className="opacity-70">{suggestion.description}</span></div>))}
       </div>
     </div>
+
+    <div className="p-2 rounded-xl">
+      <div className='flex py-2 flex-row items-center font-bold text-xl'><Star />Photos Scanning</div>
+      <div className="flex w-full p-2 rounded-2xl flex-wrap">
+        {data?.vehicleDetail?.images.map((image, index) => {
+          return <img className="rounded-xl m-2" key={index} src={image.thumbnails["170x125"]} />
+        })}
+      </div>
+    </div>
+
     </div>}
     {tab=='ai'&&<div>
     <div className='text-3xl font-bold mb-2'>AI assistants</div>
