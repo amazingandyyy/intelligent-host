@@ -97,11 +97,10 @@ const Landing = () => {
     <div className="min-h-screen flex flex-col items-center justify-center">
       <div
         {...getRootProps()}
-        className='p-24 rounded-xl cursor-pointer transition-all bg-[#593CFB]text-white hover:opacity-80'
+        className='p-24 rounded-xl cursor-pointer transition-all bg-[#593CFB] text-white hover:opacity-80'
       >
         <div className='text-4xl font-light italic'>IntelligentHost</div>
         <div className='text-2xl font-bold text-center'>Keep your Turo Car Profile High Standard!</div>
-        <div className='text-xl font-bold text-center'>Powered by AI. No Joking!</div>
         <input {...getInputProps()} />
         <p className="text-end">
           Drag and drop your car page HTML here

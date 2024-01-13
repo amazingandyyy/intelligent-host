@@ -93,7 +93,14 @@ export default function CarAnalysis({json={}, tab, carId}) {
     _.find(result.overall, {point: 'Hospitality'}).score = Math.round(100*
       (data?.vehicleDetail?.rate.dailyDistance.scalar/400)+ // 200 miles/400 miles
       (data?.vehicleDetail?.rate.airportDeliveryLocationsAndFees.length/3) // 1 airport/3 airports
-    ); 
+    );
+
+    _.find(result.overall, {point: 'Car Features'}).score = _.find(result.overall, {point: 'Car Features'}).score>100?100:_.find(result.overall, {point: 'Car Features'}).score;
+    _.find(result.overall, {point: 'Post Quality'}).score = _.find(result.overall, {point: 'Post Quality'}).score>100?100:_.find(result.overall, {point: 'Post Quality'}).score;
+    _.find(result.overall, {point: 'Host Profile'}).score = _.find(result.overall, {point: 'Host Profile'}).score>100?100:_.find(result.overall, {point: 'Host Profile'}).score;
+    _.find(result.overall, {point: 'Credibility'}).score = _.find(result.overall, {point: 'Credibility'}).score>100?100:_.find(result.overall, {point: 'Credibility'}).score;
+    _.find(result.overall, {point: 'Hospitality'}).score = _.find(result.overall, {point: 'Hospitality'}).score>100?100:_.find(result.overall, {point: 'Hospitality'}).score;
+
     setScores(result.overall)
   }, [data])
 
@@ -245,7 +252,7 @@ Ensure the paragraph includes information on "features provided by the car," "Wh
       <RadarChart outerRadius={150} width={600} height={400} data={scores}>
         <PolarGrid />
         <PolarAngleAxis fill="#000" dataKey="point" />
-        <Radar name={data?.vehicleDetail?.vehicle.name} dataKey="score" fill="#593CFB" fillOpacity={1}>
+        <Radar name={data?.vehicleDetail?.vehicle.name} dataKey="score" fill="#593CFB" fillOpacity={0.8}>
           <LabelList dataKey="score" angle="0" fill="#000" />
         </Radar>
       </RadarChart>
