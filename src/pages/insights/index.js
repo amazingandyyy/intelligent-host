@@ -65,7 +65,7 @@ export default function InsightsPage() {
         className={`min-h-screen flex flex-row items-start p-12 pt-24`}
       >
       <div className=''>
-        <CarAnalysis json={data} tab={tab} demo={originalUrl?.split('/')[originalUrl.split('/').length-1]==='1589934'} />
+        <CarAnalysis json={data} tab={tab} carId={originalUrl?.split('/')[originalUrl.split('/').length-1]} />
       </div>
       <div>
       <div className="flex flex-row items-center pb-8">

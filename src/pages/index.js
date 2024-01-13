@@ -33,8 +33,8 @@ const Landing = () => {
     }
   }, []);
 
-  const tryDemo = () => {
-    axios.get('https://host.amazingandyyy.com/demo.html')
+  const tryDemo = (id) => {
+    axios.get(`https://host.amazingandyyy.com/${id}.html`)
     .then((res) => {
       const demoHTML = res.data
       parseHTML(demoHTML)
@@ -111,7 +111,11 @@ const Landing = () => {
           </div>
         )} */}
       </div>
-      <a onClick={tryDemo} className='p-2 font-semibold hover:opacity-80 text-sm cursor-pointer text-[#593CFB]'>Try Demo</a>
+      <div className='flex flex-row items-center p-2'>
+      <span onClick={()=>tryDemo('1589934')} className='pr-2 font-semibold text-sm cursor-pointer text-gray-800'>You can try</span>
+       <a onClick={()=>tryDemo('1589934')} className='pr-2 font-semibold hover:opacity-80 text-sm cursor-pointer text-[#593CFB]'>Demo A</a>
+       <a onClick={()=>tryDemo('1022706')} className='pr-2 font-semibold hover:opacity-80 text-sm cursor-pointer text-[#593CFB]'>Demo B</a>
+      </div>
     </div>
   );
 };
