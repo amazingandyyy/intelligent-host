@@ -9,7 +9,7 @@ import _ from 'lodash';
 
 const Star = ()=>(<svg fill='#593CFB' className="inline" xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" role="img" version="1.1"><path d="m15.153 8.498 5.906.41c.904.064 1.274 1.197.582 1.783l-4.52 3.835 1.377 5.72c.212.88-.746 1.576-1.514 1.1L12 18.25l-4.983 3.095c-.77.477-1.727-.22-1.515-1.098l1.379-5.72-4.516-3.829c-.696-.582-.334-1.716.568-1.787l5.907-.413 2.226-5.373c.345-.833 1.522-.833 1.866 0l2.22 5.373Z"></path></svg>)
 
-export default function CarAnalysis({json={}, tab}) {
+export default function CarAnalysis({json={}, tab, demo}) {
   const [data, setData] = useState(json);
   const [scores, setScores] = useState({})
   const [suggestions, setSuggestions] = useState([])
@@ -163,18 +163,44 @@ Ensure the paragraph includes information on "features provided by the car," "Wh
     if(userPromt.length>0){
       prompt = prompt + '\nHere are extra request which can overrie my previous request:' + userPromt;
     }
-    // console.log(prompt)
-    axios.post('/api/ai', {prompt})
-      .then(response => {
-        const generatedDescription = response.data.response
-        setDescription(generatedDescription)
+    if(demo){
+      setTimeout(()=>{
+        setDescription(`🚗 Welcome to our 2021 Honda CR-V Touring 🚗
+        Experience the perfect blend of style, comfort, and performance with this sleek SUV. Whether you're exploring the city or embarking on a road trip, this Honda CR-V Touring will take you there in style and luxury. 🌟
+        ✨ Features provided by the car: ✨
+        - Spacious leather seats for up to 5 passengers, ensuring a comfortable journey for everyone.
+        - Advanced navigation system to guide you effortlessly to your destination, leaving you free to enjoy the ride.
+        - Panoramic sunroof, allowing you to bask in the sun and enjoy stunning views along the way.
+        - Adaptive cruise control ensures a smooth and safe drive, no matter the traffic conditions.
+        - Equipped with a powerful yet fuel-efficient engine, offering a seamless driving experience.
+        🌍 Why it's the Best Choice for short trips and long trips 🌍
+        Looking to take a short getaway or embark on a longer adventure? This Honda CR-V Touring is the ideal choice. Here are some reasons why:
+        - Its spacious interior provides ample room for luggage and gear, making it perfect for weekend getaways or extended trips.
+        - With its advanced navigation system, you can easily find points of interest like wineries, ski resorts, or beaches within 200 miles from Dublin, CA. Explore new destinations and create lasting memories.
+        - The comfortable seats and smooth ride ensure that you and your passengers will enjoy every mile of your journey.
+        🚀 Why Turo with Us 🚀
+        We are committed to providing the best Turo experience for our guests. Here's why you should choose us:
+        - We take pride in maintaining our vehicles in excellent condition. Rest assured that our Honda CR-V Touring is well-maintained and will meet your highest expectations.
+        - Our communication is prompt and friendly. We are here to address any questions or concerns you may have before, during, and after your trip.
+        - Flexibility is our priority. We strive to accommodate your needs, whether it's picking up the car at a convenient location or arranging flexible drop-off times.
+        - With our attention to detail and dedication to customer satisfaction, you can trust us to make your Turo experience unforgettable.
+        🌟 Book our 2021 Honda CR-V Touring today and embark on a journey filled with comfort, style, and adventure! 🌟`)
         setGeneratingDescription(false)
-      })
-      .catch(error => {
-        console.error('Error calling OpenAI Chat API:', error);
-        setDescription(<>Failed</>)
-        setGeneratingDescription(false)
-      });
+      }, 5000)
+      return;
+    }else{
+      axios.post('/api/ai', {prompt})
+        .then(response => {
+          const generatedDescription = response.data.response
+          setDescription(generatedDescription)
+          setGeneratingDescription(false)
+        })
+        .catch(error => {
+          console.error('Error calling OpenAI Chat API:', error);
+          setDescription(<>Failed</>)
+          setGeneratingDescription(false)
+        });
+    }
   }
 }
 
@@ -201,7 +227,7 @@ Ensure the paragraph includes information on "features provided by the car," "Wh
     </div>
     
     <div className="p-2 rounded-xl">
-      <div className='flex py-2 flex-row items-center font-bold text-xl'><Star />Suggestions</div>
+      <div className='flex py-2 flex-row items-center font-bold text-xl'><Star />Action Items</div>
       <div className="flex w-full p-2 rounded-2xl flex-wrap">
         {(suggestions).map((suggestion, index) => (<div key={index} className="rounded-xl font-md p-2"><span className="font-semibold">{suggestion.category}:</span> <span className="opacity-70">{suggestion.description}</span></div>))}
       </div>

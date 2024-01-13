@@ -69,9 +69,8 @@ const Landing = () => {
         await html2canvas(tempDiv, { windowWidth: tempDiv.scrollWidth, windowHeight: tempDiv.scrollHeight }).then((canvas) => {
           // Convert the canvas to a data URL
           const dataUrl = canvas.toDataURL('image/png');
-          console.log(2)
           // Set the screenshot state to display the image on the page
-          setScreenshot(dataUrl);
+          // setScreenshot(dataUrl);
 
           // save dataUrl to local storage
           localStorage.setItem('turoInsightsImageUrl', dataUrl);
